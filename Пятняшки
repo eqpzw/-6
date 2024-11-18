@@ -11,8 +11,7 @@ class FifteenPuzzle:
         ]
         self.shuffle()
 
-    def shuffle(self):
-        """Перемешивает плитки на игровом поле."""
+    def shuffle(self): #Перемешивает плитки на игровом поле.
         for _ in range(1000):
             empty_row, empty_col = self.get_empty_position()
             # Генерируем возможные сдвиги для пустой плитки
@@ -31,20 +30,17 @@ class FifteenPuzzle:
                 row, col = random.choice(possible_moves)
                 self.move_tile(row, col)
 
-    def print_board(self):
-        """Выводит игровое поле в консоль."""
+    def print_board(self): #Выводит игровое поле в консоль.
         for row in self.board:
             print(row)
 
-    def get_empty_position(self):
-        """Возвращает координаты пустой клетки."""
+    def get_empty_position(self): #Возвращает координаты пустой клетки.
         for i in range(4):
             for j in range(4):
                 if self.board[i][j] == 0:
                     return i, j
 
-    def move_tile(self, row, col):
-        """Перемещает плитку с заданных координат на пустое место."""
+    def move_tile(self, row, col): #Перемещает плитку с заданных координат на пустое место.
         empty_row, empty_col = self.get_empty_position()
         if abs(row - empty_row) + abs(col - empty_col) == 1:
             self.board[empty_row][empty_col] = self.board[row][col]
@@ -54,8 +50,7 @@ class FifteenPuzzle:
             print("Неверный ход!")
             return False
 
-    def is_solved(self):
-        """Проверяет, решена ли головоломка."""
+    def is_solved(self): #Проверяет, решена ли головоломка.
         target_board = [
             [1, 2, 3, 4],
             [5, 6, 7, 8],
