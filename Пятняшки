@@ -1,0 +1,92 @@
+import random
+
+
+class FifteenPuzzle:
+    def __init__(self):
+        self.board = [
+            [1, 2, 3, 4],
+            [5, 6, 7, 8],
+            [9, 10, 11, 12],
+            [13, 14, 15, 0]
+        ]
+        self.shuffle()
+
+    def shuffle(self):
+        """Перемешивает плитки на игровом поле."""
+        for _ in range(1000):
+            empty_row, empty_col = self.get_empty_position()
+            # Генерируем возможные сдвиги для пустой плитки
+            possible_moves = []
+            if empty_row > 0:  # пустая плитка может двигаться вверх
+                possible_moves.append((empty_row - 1, empty_col))
+            if empty_row < 3:  # пустая плитка может двигаться вниз
+                possible_moves.append((empty_row + 1, empty_col))
+            if empty_col > 0:  # пустая плитка может двигаться влево
+                possible_moves.append((empty_row, empty_col - 1))
+            if empty_col < 3:  # пустая плитка может двигаться вправо
+                possible_moves.append((empty_row, empty_col + 1))
+
+                # Случайный выбор одного из возможных движений
+            if possible_moves:
+                row, col = random.choice(possible_moves)
+                self.move_tile(row, col)
+
+    def print_board(self):
+        """Выводит игровое поле в консоль."""
+        for row in self.board:
+            print(row)
+
+    def get_empty_position(self):
+        """Возвращает координаты пустой клетки."""
+        for i in range(4):
+            for j in range(4):
+                if self.board[i][j] == 0:
+                    return i, j
+
+    def move_tile(self, row, col):
+        """Перемещает плитку с заданных координат на пустое место."""
+        empty_row, empty_col = self.get_empty_position()
+        if abs(row - empty_row) + abs(col - empty_col) == 1:
+            self.board[empty_row][empty_col] = self.board[row][col]
+            self.board[row][col] = 0
+            return True
+        else:
+            print("Неверный ход!")
+            return False
+
+    def is_solved(self):
+        """Проверяет, решена ли головоломка."""
+        target_board = [
+            [1, 2, 3, 4],
+            [5, 6, 7, 8],
+            [9, 10, 11, 12],
+            [13, 14, 15, 0]
+        ]
+        return self.board == target_board
+
+
+def main():
+    game = FifteenPuzzle()
+    print("Начальное состояние:")
+    game.print_board()
+
+    while not game.is_solved():
+        print("\nВведите координаты плитки (строка, столбец), которую хотите переместить:")
+
+        try:
+            row, col = map(int, input().split())
+            if not (1 <= row <= 4 and 1 <= col <= 4):
+                print("Пожалуйста, введите корректные координаты от 1 до 4.")
+                continue  # Запрашиваем координаты снова
+            if not game.move_tile(row - 1, col - 1):
+                continue  # Если ход недопустим, запрашиваем координаты снова
+
+            game.print_board()
+        except ValueError:
+            print("Некорректный ввод. Пожалуйста, введите два числа.")
+
+    print("\nПоздравляем! Вы решили головоломку!")
+
+
+if __name__ == "__main__":
+    main()
